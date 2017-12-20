@@ -81,12 +81,10 @@ class SignUpPresenter(signUpActivity: SignUpActivity) : ISignUpPresenter, ISignU
 
     override fun onError(throwable: Throwable) {
         signUpView?.showProgress(false)
-
         if (throwable is UnknownHostException) {
-            signUpView?.onSignUpError(utilModel.getString(R.string.unknown_host_exception), throwable.message.toString())
-        } else {
-            signUpView?.onSignUpError(utilModel.getString(R.string.error_internet_connectivity),
-                    utilModel.getString(R.string.no_internet_connection))
+            if(NetworkUtils.isNetworkConnected()){signUpView?.onSignUpError(utilModel.getString(R.string.unknown_host_exception), throwable.message.toString())}
+            else{signUpView?.onSignUpError(utilModel.getString(R.string.error_internet_connectivity),
+                    utilModel.getString(R.string.no_internet_connection))}
         }
     }
 
