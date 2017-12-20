@@ -103,12 +103,11 @@ class LoginPresenter(loginActivity: LoginActivity): ILoginPresenter, ILoginModel
     override fun onError(throwable: Throwable) {
         loginView?.showProgress(false)
 
-        if (throwable is UnknownHostException) {
-            loginView?.onLoginError(utilModel.getString(R.string.unknown_host_exception), throwable.message.toString())
-        } else {
-            loginView?.onLoginError(utilModel.getString(R.string.error_internet_connectivity),
-                    utilModel.getString(R.string.no_internet_connection))
-        }
+       if (throwable is UnknownHostException) {
+            if(NetworkUtils.isNetworkConnected()){loginView?.onLoginError(utilModel.getString(R.string.unknown_host_exception), throwable.message.toString())}
+              else{ loginView?.onLoginError(utilModel.getString(R.string.error_internet_connectivity),
+                    utilModel.getString(R.string.no_internet_connection))}
+        } 
     }
 
     override fun onSuccess(response: Response<LoginResponse>) {
